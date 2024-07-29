@@ -1,0 +1,47 @@
+<h2>Listado de estudiantes, ejemplo <em>bloque #each</em></h2>
+<h3>Ejemplo con lista desordenada</h3>
+<ul>
+  {{#each student}}
+  <li>{{this}}</li>
+  {{/each}}
+</ul>
+
+<h3>Ejemplo con lista ordenada alfabeticamente</h3>
+<ol type="a">
+  {{#each student}}
+  <li>{{this}}</li>
+  {{/each}}
+</ol>
+
+<h2>Listado de estudiantes, ejemplo <em>bloque #if</em></h2>
+<h3>Ejemplo con lista ordenada alfabeticamente</h3>
+<ol type="a">
+  {{#each student}}
+  {{#if this}}
+  <li>{{this}}</li>
+  {{/if}}
+  {{/each}}
+</ol>
+
+<h2>Listado de estudiantes, ejemplo <em>bloque #unless</em></h2>
+<h3>Ejemplo con lista ordenada alfabeticamente</h3>
+<ol type="a">
+  {{#each student}}
+  {{#unless this}}
+  <li>{{this}}</li>
+  {{/unless}}
+  {{/each}}
+</ol>
+
+<h2>Listado de estudiantes, ejemplo <em>bloque #else</em></h2>
+<h3>Ejemplo con lista ordenada alfabeticamente</h3>
+<ol type="a">
+  {{#each student}}
+  {{#unless this}}
+  <li>{{this}}</li>
+  {{else}}
+  Bloque else, ejecutado.
+  <li>{{this}}</li>
+  {{/unless}}
+  {{/each}}
+</ol>

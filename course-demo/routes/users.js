@@ -3,11 +3,13 @@ var router = express.Router();
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
+  res.render('forms/user-signup', {title: 'Registro de Usuarios'});
 });
 
-router.get('/1', function(req, res, next) {
-  res.send('Fulano');
+router.post('/process', function(req, res, next) {
+  console.log(req.body);
+  res.redirect(303, '/users');
 });
+
 
 module.exports = router;

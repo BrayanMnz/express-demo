@@ -1,9 +1,25 @@
-<form action="users/process" method="POST">
-	<div>
-    	<label for="fieldColor">Color favorito: </label>
-    	<input type="text" id="fieldColor" name="color">
+<form action="users/process" method="POST" class="row g-3">
+	<div class="col-md-6">
+		<label for="emailInput" class="form-label">Correo electrónico</label>
+		<input type="email" class="form-control" id="emailInput" name="email">
 	</div>
-	<div>
-    	<button type="submit">Submit</button>
+	<div class="col-md-6">
+		<label for="passwordInput" class="form-label">Contraseña</label>
+		<input type="password" class="form-control" id="passwordInput" name="password">
+	</div>
+	<div class="col-12">
+		<label for="inputAddress" class="form-label">Dirección</label>
+		<input type="text" class="form-control" id="inputAddress" name="address" placeholder="Autopista Duarte Km 1 1/2, Santiago de los Caballeros 51000">
+	</div>
+	<div class="col-12">
+		<div class="form-check">
+			<input class="form-check-input" type="checkbox" name="termsandconditions" id="gridCheck">
+			<label class="form-check-label" for="gridCheck">
+				Aceptar términos y condiciones
+			</label>
+		</div>
+	</div>
+	<div class="col-12">
+		<button type="submit" class="btn btn-primary">Registrarse</button>
 	</div>
 </form>

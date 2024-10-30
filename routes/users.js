@@ -48,6 +48,7 @@ router.get('/:userId', async function (req, res, next) {
     const userId = req.params.userId
     try {
         const users = await getUsers(res);
+        if(userId >= users.length) res.status(400).send(`No existe ningún usuario con el id ${userId}`);
         res.status(200).send(users[userId]);
     } catch (error) {
         res.status(500).send(error.message);

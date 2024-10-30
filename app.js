@@ -17,8 +17,7 @@ app.get('/', function(req, res) {
 })
 
 app.get('/about', function(req, res) {
-    randomQuote = getQuote()
-    res.render('about', {quote: randomQuote});
+    res.render('about');
 })
 
 app.get('/about/description', function(req, res) {

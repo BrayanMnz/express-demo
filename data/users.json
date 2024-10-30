@@ -1,0 +1,68 @@
+[
+    {
+        "name": "John Doe",
+        "gender": "Male",
+        "id": 0,
+        "email": "john.doe@ce.pucmm.edu.do"
+    },
+    {
+        "name": "Alice Johnson",
+        "gender": "Female",
+        "id": 1,
+        "email": "alice.johnson@ce.pucmm.edu.do"
+    },
+    {
+        "name": "Bob Smith",
+        "gender": "Male",
+        "id": 2,
+        "email": "bob.smith@ce.pucmm.edu.do"
+    },
+    {
+        "name": "Charlie Brown",
+        "gender": "Male",
+        "id": 3,
+        "email": "charlie.brown@ce.pucmm.edu.do"
+    },
+    {
+        "name": "Diana Prince",
+        "gender": "Female",
+        "id": 4,
+        "email": "diana.prince@ce.pucmm.edu.do"
+    },
+    {
+        "name": "Ethan Hunt",
+        "gender": "Male",
+        "id": 5,
+        "email": "ethan.hunt@ce.pucmm.edu.do"
+    },
+    {
+        "name": "Fiona Gallagher",
+        "gender": "Female",
+        "id": 6,
+        "email": "fiona.gallagher@ce.pucmm.edu.do"
+    },
+    {
+        "name": "George Miller",
+        "gender": "Male",
+        "id": 7,
+        "email": "george.miller@ce.pucmm.edu.do"
+    },
+    {
+        "name": "Hannah Baker",
+        "gender": "Female",
+        "id": 8,
+        "email": "hannah.baker@ce.pucmm.edu.do"
+    },
+    {
+        "name": "Ian Malcolm",
+        "gender": "Male",
+        "id": 9,
+        "email": "ian.malcolm@ce.pucmm.edu.do"
+    },
+    {
+        "name": "Jenna Ortega",
+        "gender": "Female",
+        "id": 10,
+        "email": "jenna.ortega@ce.pucmm.edu.do"
+    }
+]

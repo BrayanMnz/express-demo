@@ -1,6 +1,8 @@
 const express = require('express');
 const app = express();
 
+var usersRouter = require('./routes/users');
+
 app.get('/', function(req, res) {
     res.send('Hola mundo!');
 })
@@ -17,7 +19,7 @@ app.get('/about*', function(req, res) {
     res.send('Página about con wildcard');
 })
 
-
+app.use('/users', usersRouter);
 
 app.use( (req, res) => {
     res.type("text/plain")
@@ -26,5 +28,5 @@ app.use( (req, res) => {
 })
 
 app.listen(3000, function() {
-    console.log('Ejemplo de aplicación en EXPRESS JS, escuchando en el puerto 3000')
+    console.log('Ejemplo de aplicación en EXPRESS JS, escuchando en el puerto 3000...')
 });

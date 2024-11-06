@@ -17,7 +17,8 @@ app.get('/', function(req, res) {
 })
 
 app.get('/about', function(req, res) {
-    res.render('about');
+    const quote = getQuote()
+    res.render('about', {quote: quote });
 })
 
 app.get('/about/description', function(req, res) {

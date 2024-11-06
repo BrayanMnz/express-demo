@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { getQuote } = require('../quote');
+const { getQuote } = require('../util/quote');
 
 
 router.get('/', function(req, res) {

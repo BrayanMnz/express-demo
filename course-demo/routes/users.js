@@ -1,6 +1,20 @@
 var express = require('express');
 var router = express.Router();
 const multiparty = require("multiparty");
+const path = require('path')
+const fs = require('fs/promises')
+
+router.get('/', async function (req, res, next) {
+  try {
+    const users = await getUsers(res);
+    res.render('users', {
+      title: 'Lista de Usuarios',
+      user: users
+    });
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+});
 
 /* GET users listing. */
 router.get('/signup', function (req, res, next) {
@@ -39,16 +53,61 @@ router.post('/signup/file', function (req, res, next) {
   });
 });
 
-  router.get('/signup/thank-you', function (req, res, next) {
-    res.render('forms/user-signup-thank-you', {
-      title: 'Gracias',
-      layout: './layouts/forms-layout'
-    });
+router.get('/signup/thank-you', function (req, res, next) {
+  res.render('forms/user-signup-thank-you', {
+    title: 'Gracias',
+    layout: './layouts/forms-layout'
   });
+});
 
-  router.post('/api/user-signup/process', (req, res) => {
-    console.log(req.body);
-    return res.send({ result: 'success' });
-  })
+router.post('/api/user-signup/process', async (req, res) => {
+  const name = req.body.name
+  const passwd = req.body.password
+  const email = req.body.email
+  const address = req.body.address
+  const phone = req.body.phoneNumber
+  const terms = req.body.terms
 
-  module.exports = router;
+  try {
+    const users = await getUsers(res);
+    let user = {
+      "id": users.length,
+      "name": name,
+      "email": email,
+      "password": passwd,
+      "address": address,
+      "phoneNumber": phone,
+      "terms": terms
+    }
+    users.push(user);
+
+    // Escribiendo al archivo users.json
+    const filePath = path.join(__dirname, '..', 'data', 'users.json');
+
+    fs.writeFile(filePath, JSON.stringify(users), (err) => {
+      if (err) {
+        console.log(err);
+        throw err;
+      }
+      console.log(`Nuevo usuario ${name} ha sido agregado al archivo`);
+    });
+
+    res.status(200).send(`Nuevo usuario ${name} ha sido agregado al archivo`);
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+  return res.send({ result: 'success' });
+})
+
+async function getUsers() {
+  const filePath = path.join(__dirname, '..', 'data', 'users.json');
+  try {
+    const users = await fs.readFile(filePath, 'utf-8');
+    return JSON.parse(users);
+  } catch (error) {
+    console.log(error)
+    throw new Error("Users cannot be read", err);
+  }
+}
+
+module.exports = router;

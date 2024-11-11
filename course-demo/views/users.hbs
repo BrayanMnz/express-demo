@@ -1,0 +1,22 @@
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Correo</th>
+            <th scope="col">Direccion</th>
+            <th scope="col">Telefono</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each user}}
+        <tr>
+            <th scope="row">{{this.id}}</th>
+            <td>{{this.name}}</td>
+            <td>{{this.email}}</td>
+            <td>{{this.address}}</td>
+            <td>{{this.phoneNumber}}</td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>

@@ -3,12 +3,16 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const cookieSession = require('cookie-session')
+
+const { credentials } = require('./config')
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var aboutRouter = require('./routes/about');
 var handlebarsRouter = require('./routes/handlebars-examples');
 var cookiesRouter = require('./routes/cookies');
+const { config } = require('process');
 
 
 var app = express();
@@ -23,8 +27,15 @@ app.set('view options', {layout: './layouts/main'})
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
+//app.use(cookieParser());
+app.use(cookieParser(credentials.cookieSecret));
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(cookieSession({
+    name: 'session', 
+    maxAge: 4000, 
+    keys: [credentials.cookieSecret]
+  })) 
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);

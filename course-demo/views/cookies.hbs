@@ -1,0 +1,16 @@
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">Nombre</th>
+            <th scope="col">Valor</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each cookie}}
+        <tr>
+            <td>{{@key}}</td>
+            <td>{{this}}</td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>

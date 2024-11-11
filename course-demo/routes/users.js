@@ -5,18 +5,28 @@ const path = require('path')
 const fs = require('fs/promises')
 
 router.get('/', async function (req, res, next) {
-  try {
-    const users = await getUsers(res);
-    res.render('users', {
-      title: 'Lista de Usuarios',
-      user: users
-    });
-  } catch (error) {
-    res.status(500).send(error.message);
+  if (req.cookies.login) {
+    try {
+      const users = await getUsers(res);
+      res.render('users', {
+        title: 'Lista de Usuarios',
+        user: users
+      });
+    } catch (error) {
+      res.status(500).send(error.message);
+    }
+  } else {
+    res.redirect(303, '/users/login');
   }
 });
 
-/* GET users listing. */
+router.get('/login', function (req, res, next) {
+  res.render('forms/user-login', {
+    title: 'Inicio de sesion de',
+    layout: './layouts/forms-layout'
+  });
+});
+
 router.get('/signup', function (req, res, next) {
   res.render('forms/user-signup', {
     title: 'Registro de Usuarios',
@@ -59,6 +69,25 @@ router.get('/signup/thank-you', function (req, res, next) {
     layout: './layouts/forms-layout'
   });
 });
+
+router.post('/login', async (req, res) => {
+  const passwd = req.body.password
+  const email = req.body.email
+
+  try {
+    const users = await getUsers(res);
+    const user = users.find((usr) => (usr.email === email) && (usr.password === passwd));
+    if (user) {
+      console.log(`El usuario ${user.name} ha iniciado sesion`);
+      res.cookie('login', email, { maxAge: 60000 });
+      res.redirect(303, '/');
+    }else{
+      return res.render('bad-login', {email: email})
+    }
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+})
 
 router.post('/api/user-signup/process', async (req, res) => {
   const name = req.body.name

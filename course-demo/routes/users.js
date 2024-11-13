@@ -3,6 +3,7 @@ var router = express.Router();
 const multiparty = require("multiparty");
 const path = require('path')
 const fs = require('fs/promises')
+const { getUsers, addUser } = require('../data/db')
 
 router.get('/', async function (req, res, next) {
   if (req.cookies.login) {
@@ -81,8 +82,8 @@ router.post('/login', async (req, res) => {
       console.log(`El usuario ${user.name} ha iniciado sesion`);
       res.cookie('login', email, { maxAge: 60000 });
       res.redirect(303, '/');
-    }else{
-      return res.render('bad-login', {email: email})
+    } else {
+      return res.render('bad-login', { email: email })
     }
   } catch (error) {
     res.status(500).send(error.message);
@@ -98,37 +99,15 @@ router.post('/api/user-signup/process', async (req, res) => {
   const terms = req.body.terms
 
   try {
-    const users = await getUsers(res);
-    let user = {
-      "id": users.length,
-      "name": name,
-      "email": email,
-      "password": passwd,
-      "address": address,
-      "phoneNumber": phone,
-      "terms": terms
-    }
-    users.push(user);
-
-    // Escribiendo al archivo users.json
-    const filePath = path.join(__dirname, '..', 'data', 'users.json');
-
-    fs.writeFile(filePath, JSON.stringify(users), (err) => {
-      if (err) {
-        console.log(err);
-        throw err;
-      }
-      console.log(`Nuevo usuario ${name} ha sido agregado al archivo`);
-    });
-
-    res.status(200).send(`Nuevo usuario ${name} ha sido agregado al archivo`);
+    addUser(name, email, passwd, address, phone, terms);
+    return res.send({ result: 'success' });
   } catch (error) {
     res.status(500).send(error.message);
   }
-  return res.send({ result: 'success' });
+  return res.send({ result: 'failed' });
 })
 
-async function getUsers() {
+async function getUsersFromFile() {
   const filePath = path.join(__dirname, '..', 'data', 'users.json');
   try {
     const users = await fs.readFile(filePath, 'utf-8');

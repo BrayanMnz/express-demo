@@ -3,7 +3,9 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-const cookieSession = require('cookie-session')
+//const cookieSession = require('cookie-session')
+const expressSession = require('express-session') // La importamos a nuestro proyecto 
+
 
 const { credentials } = require('./config')
 
@@ -31,11 +33,13 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser(credentials.cookieSecret));
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(cookieSession({
-    name: 'session', 
-    maxAge: 4000, 
-    keys: [credentials.cookieSecret]
-  })) 
+// app.use(cookieSession({
+//     name: 'session', 
+//     maxAge: 40000, 
+//     keys: [credentials.cookieSecret]
+//   })) 
+
+app.use(expressSession({resave: false, saveUninitialized: false})) // Agregamos el middleware para que haga su magia.
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);

@@ -5,7 +5,8 @@ const path = require('path')
 const fs = require('fs/promises')
 
 router.get('/', async function (req, res, next) {
-  if (req.cookies.login) {
+  if(req.cookies.login){
+  //if (req.session.userEmail) {
     try {
       const users = await getUsers(res);
       res.render('users', {
@@ -79,6 +80,7 @@ router.post('/login', async (req, res) => {
     const user = users.find((usr) => (usr.email === email) && (usr.password === passwd));
     if (user) {
       console.log(`El usuario ${user.name} ha iniciado sesion`);
+      req.session.userEmail = user.email
       res.cookie('login', email, { maxAge: 60000 });
       res.redirect(303, '/');
     }else{

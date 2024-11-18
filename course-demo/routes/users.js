@@ -3,6 +3,8 @@ var router = express.Router();
 const multiparty = require("multiparty");
 const path = require('path')
 const fs = require('fs/promises')
+const bcrypt = require('bcryptjs');
+
 
 const models = require("../models");
 
@@ -12,7 +14,7 @@ router.get('/', async function (req, res, next) {
       const users = await models.User.findAll();
       res.render('users', {
         title: 'Lista de Usuarios',
-        user: users
+        user: users.map(user => user.toJSON())
       });
     } catch (error) {
       res.status(500).send(error.message);
@@ -79,9 +81,8 @@ router.post('/login', async (req, res) => {
   const email = req.body.email
 
   try {
-    const users = await getUsers(res);
-    const user = users.find((usr) => (usr.email === email) && (usr.password === passwd));
-    if (user) {
+    const user = await models.User.findOne({ where: { email: email}})
+    if (bcrypt.compareSync(passwd, user.password)) {
       console.log(`El usuario ${user.name} ha iniciado sesion`);
       res.cookie('login', email, { maxAge: 60000 });
       res.redirect(303, '/');

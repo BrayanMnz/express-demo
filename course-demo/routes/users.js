@@ -3,20 +3,9 @@ var router = express.Router();
 const multiparty = require("multiparty");
 const path = require('path')
 const fs = require('fs/promises')
-const { getUsers, addUser } = require('../data/db')
 
 router.get('/', async function (req, res, next) {
   if (req.cookies.login) {
-    try {
-      const users = await getUsers(res);
-      res.render('users', {
-        title: 'Lista de Usuarios',
-        user: users
-      });
-    } catch (error) {
-      res.status(500).send(error.message);
-    }
-  } else {
     res.redirect(303, '/users/login');
   }
 });
@@ -99,7 +88,6 @@ router.post('/api/user-signup/process', async (req, res) => {
   const terms = req.body.terms
 
   try {
-    addUser(name, email, passwd, address, phone, terms);
     return res.send({ result: 'success' });
   } catch (error) {
     res.status(500).send(error.message);

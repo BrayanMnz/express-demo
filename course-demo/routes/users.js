@@ -4,11 +4,25 @@ const multiparty = require("multiparty");
 const path = require('path')
 const fs = require('fs/promises')
 
+const models = require("../models");
+
 router.get('/', async function (req, res, next) {
   if (req.cookies.login) {
+    try {
+      const users = await models.User.findAll();
+      res.render('users', {
+        title: 'Lista de Usuarios',
+        user: users
+      });
+    } catch (error) {
+      res.status(500).send(error.message);
+    }
+  } else {
     res.redirect(303, '/users/login');
   }
 });
+    
+
 
 router.get('/login', function (req, res, next) {
   res.render('forms/user-login', {

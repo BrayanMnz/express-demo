@@ -23,15 +23,16 @@ router.get('/', async function (req, res, next) {
     res.redirect(303, '/users/login');
   }
 });
-    
 
-
-router.get('/login', function (req, res, next) {
+router.get('/login', function (req, res) {
   res.render('forms/user-login', {
     title: 'Inicio de sesion de',
     layout: './layouts/forms-layout'
   });
 });
+
+
+
 
 router.get('/signup', function (req, res, next) {
   res.render('forms/user-signup', {
@@ -81,10 +82,11 @@ router.post('/login', async (req, res) => {
   const email = req.body.email
 
   try {
-    const user = await models.User.findOne({ where: { email: email}})
+    const user = await models.User.findOne({ where: { email: email } })
+
     if (bcrypt.compareSync(passwd, user.password)) {
       console.log(`El usuario ${user.name} ha iniciado sesion`);
-      res.cookie('login', email, { maxAge: 60000 });
+      res.cookie('login', email, { maxAge: 1200000 });
       res.redirect(303, '/');
     } else {
       return res.render('bad-login', { email: email })
@@ -103,12 +105,55 @@ router.post('/api/user-signup/process', async (req, res) => {
   const terms = req.body.terms
 
   try {
+    await models.User.create(
+      {
+        name: name,
+        email: email,
+        password: passwd,
+        address: address,
+        phoneNumber: phone,
+        terms: terms
+      })
+
     return res.send({ result: 'success' });
   } catch (error) {
     res.status(500).send(error.message);
   }
   return res.send({ result: 'failed' });
 })
+
+router.get('/:id', async function (req, res) {
+
+  let user = await models.User.findByPk(req.params.id);
+  if (!user) {
+    return res.sendStatus(404);
+  }
+  res.json(user.toJSON());
+});
+
+// curl -X DELETE localhost:3000/users/mia.johnson@test.com
+router.delete('/:email', async (req, res) => {
+
+  let user = await models.User.findOne({ where: { email: req.params.email } });
+  await user.destroy();
+
+  //await models.User.destroy({ where: { email: req.params.email }});
+  res.send('Usuario eliminado correctamente');
+})
+
+// curl -X PUT localhost:3000/users/mia.johnson@test.com?name=Pepe
+router.put('/:email/:name', async (req, res) => {
+
+  await models.User.update({ name: req.params.name },
+    { where: { email: req.params.email } });
+
+  //const user = await models.User.findOne({ where: { email: email } }) 
+  //user.name = req.params.name;
+  //await user.save();
+
+  res.send('Usuario modificado correctamente');
+})
+
 
 async function getUsersFromFile() {
   const filePath = path.join(__dirname, '..', 'data', 'users.json');
